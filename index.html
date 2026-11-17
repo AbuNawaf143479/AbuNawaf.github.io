@@ -319,7 +319,11 @@ const off=(p,k)=>CH[p].slice(0,k).reduce((a,b)=>a+b,0);
 const fmt=s=>{s=Math.max(0,Math.floor(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
 document.getElementById('parts').innerHTML=PARTS.map((p,i)=>`<button class="btn${i?'':' sel'}" data-p="${i}">${p.t}</button>`).join('');
 document.querySelectorAll('#parts .btn').forEach(b=>b.onclick=()=>{loadPart(+b.dataset.p,0,false)});
-function loadChunk(k,t,play){K=k;vid.src=SRC(P,k);vid.load();pending=t;vid.onloadedmetadata=()=>{if(pending!=null){vid.currentTime=pending;pending=null}if(play)vid.play()}}
+function cands(p,k){const n=`p${p+1}_${k}.mp4`;return [`v/${n}`,n,`./v/${n}`,`V/${n}`]}
+function vmsg(t){let m=document.getElementById('vmsg');if(!m){m=document.createElement('div');m.id='vmsg';m.style.cssText='position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:20px;background:rgba(10,15,44,.92);color:#ffd84d;font-size:17px;line-height:1.8;z-index:5';document.querySelector('.player').style.position='relative';document.querySelector('.player').appendChild(m)}m.style.display=t?'grid':'none';m.innerHTML=t||''}
+function loadChunk(k,t,play){K=k;const c=window.VSRC?[SRC(P,k)]:cands(P,k);let ci=0;vmsg('');
+ vid.onerror=()=>{ci++;if(ci<c.length){vid.src=c[ci];vid.load()}else vmsg(`⚠ لم أجد ملف الفيديو <b dir="ltr">p${P+1}_${k}.mp4</b><br>تأكد أنك رفعته داخل مجلد اسمه <b dir="ltr">v</b> بجانب index.html<br>وأن اسمه مطابق تماماً (حروف صغيرة).`)};
+ vid.src=c[0];vid.load();pending=t;vid.onloadedmetadata=()=>{if(pending!=null){vid.currentTime=pending;pending=null}if(play)vid.play()}}
 function loadPart(p,t=0,play=false){P=p;document.querySelectorAll('#parts .btn').forEach(b=>b.classList.toggle('sel',+b.dataset.p==p));
  document.getElementById('chap').innerHTML=PARTS[p].ch.map((c,i)=>`<li data-i="${i}"><span>${c[1]}</span><span>${c[2]}</span><span class="ts">${fmt(c[0])}</span></li>`).join('');
  document.querySelectorAll('#chap li').forEach(li=>li.onclick=()=>{goto(PARTS[P].ch[+li.dataset.i][0],true)});goto(t,play)}
