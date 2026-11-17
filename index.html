@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>كيف تختلف الذرات؟ — درس تفاعلي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Lalezar&family=Readex+Pro:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--cy:#00e5ff;--ok:#2bff88;--bad:#ff4d6d;--gold:#ffd84d;--glass:rgba(255,255,255,.08);--line:rgba(255,255,255,.14);--tx:#eaf6ff;--pu:#b388ff;--bl:#4da3ff;--te:#2fe0c0}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:Cairo,'Readex Pro',sans-serif;color:var(--tx);background:linear-gradient(135deg,#0a0f2c,#1a0b3b);}
+#bg,#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+#bg{z-index:0}#fx{z-index:50}
+.app{position:relative;z-index:1;height:100%;display:grid;grid-template-rows:auto auto 1fr;gap:8px;padding:10px 14px}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px}
+h1{font-family:Lalezar,'Readex Pro';font-weight:400;font-size:clamp(24px,3.2vw,40px);color:var(--cy);text-shadow:0 0 12px rgba(0,229,255,.7),0 0 30px rgba(0,229,255,.35);line-height:1.1}
+.sub{font-size:14px;opacity:.85}
+.hbtn{display:flex;gap:8px}
+.ib{background:var(--glass);border:1px solid var(--line);color:var(--tx);border-radius:12px;padding:7px 11px;font-size:18px;cursor:pointer;backdrop-filter:blur(8px)}
+.ib:hover{border-color:var(--cy);box-shadow:0 0 10px rgba(0,229,255,.5)}
+nav{display:flex;gap:8px;flex-wrap:wrap}
+nav button{flex:1;min-width:110px;font-family:inherit;font-weight:800;font-size:16px;color:var(--tx);background:var(--glass);border:1px solid var(--line);border-radius:14px;padding:9px 6px;cursor:pointer;backdrop-filter:blur(8px);transition:.2s}
+nav button.on{border-color:var(--cy);color:#001;background:var(--cy);box-shadow:0 0 16px rgba(0,229,255,.7)}
+main{min-height:0;position:relative}
+.tab{display:none;height:100%;min-height:0}
+.tab.on{display:grid}
+.panel{background:var(--glass);border:1px solid var(--line);border-radius:18px;backdrop-filter:blur(10px);padding:14px;min-height:0}
+.ttl{font-family:Lalezar,'Readex Pro';font-weight:400;color:var(--gold);font-size:22px;margin-bottom:8px}
+.scroll{overflow:auto;min-height:0}
+.scroll::-webkit-scrollbar{width:6px}.scroll::-webkit-scrollbar-thumb{background:rgba(0,229,255,.4);border-radius:6px}
+.ltr{direction:ltr;unicode-bidi:isolate;display:inline-block}
+.btn{font-family:inherit;font-weight:800;font-size:15px;border:1px solid var(--cy);background:rgba(0,229,255,.12);color:var(--tx);border-radius:12px;padding:8px 14px;cursor:pointer;transition:.15s}
+.btn:hover{background:rgba(0,229,255,.3);box-shadow:0 0 10px rgba(0,229,255,.6)}
+.btn.g{border-color:var(--ok);background:rgba(43,255,136,.12)}.btn.r{border-color:var(--bad);background:rgba(255,77,109,.12)}.btn.y{border-color:var(--gold);background:rgba(255,216,77,.12)}
+.btn.sel{background:var(--cy);color:#001}
+input,select{font-family:inherit;font-size:16px;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:6px 8px;width:100%}
+input:focus{outline:none;border-color:var(--cy);box-shadow:0 0 8px rgba(0,229,255,.5)}
+/* tab1 */
+#t1{grid-template-columns:1fr 1.25fr;gap:12px}
+.idea{border:1px solid var(--cy);border-radius:16px;padding:12px 14px;background:rgba(0,229,255,.08);box-shadow:0 0 18px rgba(0,229,255,.25) inset;margin-bottom:10px}
+.idea b{color:var(--cy);font-family:Lalezar,'Readex Pro';font-weight:400;font-size:20px}
+.obj{list-style:none;counter-reset:o}
+.obj li{counter-increment:o;position:relative;padding:8px 44px 8px 8px;margin:6px 0;border-radius:12px;background:rgba(255,255,255,.05);font-size:16px}
+.obj li::before{content:counter(o);position:absolute;right:8px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:var(--cy);color:#001;font-weight:800;display:grid;place-items:center}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;grid-auto-rows:minmax(120px,1fr)}
+.fc{perspective:800px;cursor:pointer}
+.fc .in{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.fc.flip .in{transform:rotateY(180deg)}
+.fc .f,.fc .b{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;display:grid;place-items:center;text-align:center;padding:10px;border:1px solid var(--line)}
+.fc .f{background:linear-gradient(135deg,rgba(0,229,255,.18),rgba(179,136,255,.15));font-family:Lalezar,'Readex Pro';font-size:24px;color:#fff}
+.fc .b{background:rgba(43,255,136,.1);border-color:var(--ok);transform:rotateY(180deg);font-size:15px;line-height:1.6}
+.fc .f small{display:block;font-family:Cairo,'Readex Pro';font-size:12px;opacity:.7}
+/* tab2 */
+#t2{grid-template-rows:auto 1fr;gap:10px}
+.parts{display:flex;gap:8px}
+.parts .btn{flex:1}
+.vwrap{display:grid;grid-template-columns:2.2fr 1fr;gap:10px;min-height:0}
+.player{display:grid;grid-template-rows:1fr auto;min-height:0;background:#000;border-radius:16px;overflow:hidden;border:1px solid var(--line)}
+video{width:100%;height:100%;object-fit:contain;background:#000;min-height:0}
+.ctr{display:flex;align-items:center;gap:8px;padding:8px;background:rgba(10,15,44,.95);direction:ltr}
+.ctr button{background:none;border:1px solid var(--line);color:#fff;border-radius:9px;padding:4px 9px;font-size:16px;cursor:pointer;font-family:inherit}
+.ctr input[type=range]{flex:1;accent-color:var(--cy);padding:0;border:none;background:none}
+.ctr .tm{font-size:13px;min-width:96px;text-align:center}
+.chap{list-style:none}
+.chap li{display:flex;gap:8px;align-items:center;padding:7px 8px;border-radius:10px;cursor:pointer;font-size:14.5px;border:1px solid transparent}
+.chap li:hover{background:rgba(255,255,255,.06)}
+.chap li.on{border-color:var(--cy);background:rgba(0,229,255,.12);box-shadow:0 0 10px rgba(0,229,255,.3)}
+.chap .ts{margin-right:auto;opacity:.7;font-size:12px;direction:ltr}
+/* tab3 */
+#t3{grid-template-rows:auto 1fr;gap:10px}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.tool{display:none;height:100%;min-height:0}
+.tool.on{display:grid}
+.atom{grid-template-columns:1fr 1.1fr;gap:12px}
+.ctl{display:grid;gap:10px;align-content:start}
+.row{display:flex;align-items:center;gap:8px}
+.cnt{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.05);border-radius:12px;padding:6px 10px}
+.cnt span.n{min-width:34px;text-align:center;font-size:22px;font-weight:800}
+.cnt button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-size:20px;cursor:pointer}
+.big{font-size:20px;line-height:1.9}
+.tag{display:inline-block;padding:2px 10px;border-radius:999px;border:1px solid var(--line);margin:2px}
+.p{color:#ff7a8a}.nn{color:#b9c4d6}.e{color:#6fc3ff}
+canvas.atomc{width:100%;height:100%;min-height:0}
+.tri{grid-template-columns:1fr 1fr;gap:16px;align-items:center}
+.triangle{position:relative;width:min(380px,90%);aspect-ratio:1.1;margin:auto}
+.triangle svg{width:100%;height:100%}
+.law{font-size:26px;text-align:center;min-height:60px}
+.calc{grid-template-columns:1.2fr 1fr;gap:12px}
+table.iso{width:100%;border-collapse:separate;border-spacing:0 6px}
+table.iso td,table.iso th{padding:4px;text-align:center}
+.steps{list-style:none;display:grid;gap:6px}
+.steps li{padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.05);border-right:4px solid var(--cy);font-size:15.5px}
+.steps li b{color:var(--gold)}
+.res{border:2px solid var(--bad);border-radius:12px;padding:8px 12px;font-size:22px;text-align:center;margin-top:6px;box-shadow:0 0 14px rgba(255,77,109,.35)}
+.warn{color:var(--gold);font-size:14px;margin-top:6px}
+.prac{grid-template-columns:1.1fr 1fr;gap:12px}
+.q{font-size:20px;line-height:1.8;margin-bottom:10px}
+.sort{grid-template-rows:auto 1fr;gap:10px}
+.pool{display:flex;flex-wrap:wrap;gap:8px;min-height:50px}
+.chip{padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.07);cursor:pointer;font-size:15px}
+.chip.sel{border-color:var(--cy);box-shadow:0 0 10px rgba(0,229,255,.7)}
+.bins{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;min-height:0}
+.bin{border:2px dashed var(--line);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:6px;cursor:pointer;min-height:0;overflow:auto}
+.bin h4{font-family:Lalezar,'Readex Pro';font-weight:400;font-size:20px;color:var(--cy);text-align:center}
+.bin .chip{cursor:default;border-color:var(--ok);background:rgba(43,255,136,.12)}
+.shake{animation:sh .35s}@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+/* tab4 */
+#t4{grid-template-columns:1fr;gap:10px}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.qtext{font-size:clamp(18px,2.2vw,26px);font-weight:800;margin:10px 0 12px;line-height:1.6}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{font-family:inherit;text-align:right;font-size:17px;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--tx);cursor:pointer;transition:.15s}
+.opt:hover{border-color:var(--cy)}
+.opt.ok{border-color:var(--ok);background:rgba(43,255,136,.18);box-shadow:0 0 14px rgba(43,255,136,.4)}
+.opt.no{border-color:var(--bad);background:rgba(255,77,109,.18)}
+.exp{margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(255,216,77,.08);border:1px solid rgba(255,216,77,.4);font-size:15.5px;display:none}
+.bar{height:8px;border-radius:8px;background:rgba(255,255,255,.1);overflow:hidden;flex:1;min-width:120px}
+.bar i{display:block;height:100%;background:var(--cy);box-shadow:0 0 8px var(--cy);transition:width .3s}
+.score{font-size:18px;color:var(--gold);font-weight:800}
+.tmr{font-size:18px;font-weight:800;color:var(--cy);min-width:52px;text-align:center}
+.result{display:grid;place-items:center;text-align:center;gap:10px;height:100%}
+.result .big2{font-family:Lalezar,'Readex Pro';font-size:64px;color:var(--ok);text-shadow:0 0 18px rgba(43,255,136,.7)}
+/* tab5 */
+#t5{grid-template-rows:auto 1fr;gap:10px}
+.mem{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;height:100%}
+.mc{border-radius:14px;border:1px solid var(--line);background:linear-gradient(135deg,rgba(0,229,255,.15),rgba(179,136,255,.15));display:grid;place-items:center;text-align:center;padding:8px;font-size:15px;cursor:pointer;min-height:0;transition:.2s}
+.mc.hide{font-size:0;background:linear-gradient(135deg,#1b2a6b,#3a1b6b)}
+.mc.hide::after{content:"⚛";font-size:34px;opacity:.6}
+.mc.done{border-color:var(--ok);background:rgba(43,255,136,.15);cursor:default}
+.teams{display:grid;grid-template-columns:1fr 2fr 1fr;gap:10px;height:100%}
+.team{display:grid;align-content:center;justify-items:center;gap:8px;border-radius:16px;border:2px solid var(--line)}
+.team.on{border-color:var(--gold);box-shadow:0 0 18px rgba(255,216,77,.45)}
+.team .pts{font-family:Lalezar,'Readex Pro';font-size:60px;color:var(--gold)}
+.team input{width:80%;text-align:center}
+@media (max-width:760px){
+ .app{padding:6px 8px;gap:6px}
+ h1{font-size:22px}.sub{font-size:11px}
+ nav button{min-width:0;font-size:12.5px;padding:7px 2px}
+ #t1,.vwrap,.atom,.tri,.calc,.prac{grid-template-columns:1fr}
+ #t1{overflow:auto}
+ .cards{grid-template-columns:repeat(2,1fr);grid-auto-rows:110px}
+ .vwrap{grid-template-rows:auto 1fr}
+ .opts{grid-template-columns:1fr}
+ .bins{grid-template-columns:repeat(2,1fr)}
+ .mem{grid-template-columns:repeat(3,1fr)}
+ .teams{grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr}
+ .teams .qa{grid-column:1/3;grid-row:2}
+ .tool.on{overflow:auto}
+ .team .pts{font-size:36px}
+}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas><canvas id="fx"></canvas>
+<div class="app">
+<header>
+ <div><h1>كيف تختلف الذرات؟</h1><div class="sub">الكيمياء · الدرس 3-3 · المعلم: علي قصادي</div></div>
+ <div class="hbtn"><button class="ib" id="mute" title="الصوت">🔊</button><button class="ib" id="fs" title="ملء الشاشة">⛶</button></div>
+</header>
+<nav>
+ <button data-t="t1" class="on">🎯 الأهداف والمفردات</button>
+ <button data-t="t2">📺 الشرح</button>
+ <button data-t="t3">🧪 المهارات</button>
+ <button data-t="t4">❓ الأسئلة</button>
+ <button data-t="t5">🎮 ألعاب</button>
+</nav>
+<main>
+<!-- TAB 1 -->
+<section class="tab on" id="t1">
+ <div class="panel scroll">
+  <div class="idea"><b>الفكرة الرئيسة</b><div style="font-size:18px;margin-top:4px">يحدد عدد البروتونات والعدد الكتلي نوعَ الذرة.</div></div>
+  <div class="ttl">الأهداف</div>
+  <ol class="obj">
+   <li>تفسر دور العدد الذري في تحديد هوية الذرة.</li>
+   <li>تعرّف النظائر.</li>
+   <li>تفسر سبب أن الكتل الذرية ليست أعداداً صحيحة.</li>
+   <li>تحسب عدد البروتونات والنيوترونات والإلكترونات في الذرة مستعملاً العدد الكتلي والعدد الذري.</li>
+  </ol>
+ </div>
+ <div class="panel" style="display:grid;grid-template-rows:auto 1fr;min-height:0">
+  <div class="ttl">المفردات <span style="font-size:14px;color:var(--tx);opacity:.7;font-family:Cairo">(اضغط البطاقة لتنقلب)</span></div>
+  <div class="cards" id="cards"></div>
+ </div>
+</section>
+<!-- TAB 2 -->
+<section class="tab" id="t2">
+ <div class="parts" id="parts"></div>
+ <div class="vwrap">
+  <div class="player">
+   <video id="vid" playsinline preload="metadata"></video>
+   <div class="ctr">
+    <button id="play">▶</button><button id="back">⟲10</button>
+    <input type="range" id="seek" min="0" max="1000" value="0">
+    <span class="tm" id="tm">0:00 / 0:00</span>
+    <button id="spd">1x</button><button id="vfs">⛶</button>
+   </div>
+  </div>
+  <div class="panel scroll"><div class="ttl">فهرس المشاهد</div><ul class="chap" id="chap"></ul></div>
+ </div>
+</section>
+<!-- TAB 3 -->
+<section class="tab" id="t3">
+ <div class="tools" id="tools">
+  <button class="btn sel" data-k="k1">⚛ ابنِ ذرة</button>
+  <button class="btn" data-k="k2">🔺 مثلث العدد الكتلي</button>
+  <button class="btn" data-k="k3">⚖ حاسبة الكتلة الذرية</button>
+  <button class="btn" data-k="k4">♾ تدريب لا ينتهي</button>
+  <button class="btn" data-k="k5">🧩 لعبة التصنيف</button>
+ </div>
+ <div class="panel" style="min-height:0">
+  <!-- k1 -->
+  <div class="tool atom on" id="k1">
+   <div class="ctl">
+    <div class="ttl">ابنِ ذرتك بنفسك</div>
+    <div class="row"><span class="p" style="width:110px">بروتونات p⁺</span><div class="cnt"><button data-d="p,-1">−</button><span class="n p" id="np">6</span><button data-d="p,1">+</button></div></div>
+    <div class="row"><span class="nn" style="width:110px">نيوترونات n</span><div class="cnt"><button data-d="n,-1">−</button><span class="n nn" id="nn">6</span><button data-d="n,1">+</button></div></div>
+    <div class="row"><span class="e" style="width:110px">إلكترونات e⁻</span><div class="cnt"><button data-d="e,-1">−</button><span class="n e" id="ne">6</span><button data-d="e,1">+</button></div></div>
+    <div class="big" id="atomInfo"></div>
+   </div>
+   <canvas class="atomc" id="atomc"></canvas>
+  </div>
+  <!-- k2 -->
+  <div class="tool tri" id="k2">
+   <div class="triangle"><svg viewBox="0 0 330 300" id="trisvg">
+    <polygon points="165,10 320,290 10,290" fill="rgba(0,229,255,.08)" stroke="#00e5ff" stroke-width="3"/>
+    <line x1="85" y1="150" x2="245" y2="150" stroke="#00e5ff" stroke-width="3"/>
+    <line x1="165" y1="150" x2="165" y2="290" stroke="#00e5ff" stroke-width="3"/>
+    <g class="cell" data-c="A" style="cursor:pointer"><rect x="115" y="60" width="100" height="80" fill="transparent"/><text x="165" y="118" text-anchor="middle" font-size="38" fill="#ff7a8a" font-weight="800">A</text></g>
+    <g class="cell" data-c="Z" style="cursor:pointer"><rect x="175" y="160" width="100" height="120" fill="transparent"/><text x="225" y="240" text-anchor="middle" font-size="38" fill="#6fc3ff" font-weight="800">Z</text></g>
+    <g class="cell" data-c="N" style="cursor:pointer"><rect x="55" y="160" width="100" height="120" fill="transparent"/><text x="105" y="240" text-anchor="middle" font-size="38" fill="#b9c4d6" font-weight="800">n</text></g>
+   </svg></div>
+   <div>
+    <div class="ttl">اضغط على الحرف الذي تريد حسابه</div>
+    <p style="opacity:.85;line-height:1.8">A = العدد الكتلي · Z = العدد الذري (عدد البروتونات) · n = عدد النيوترونات</p>
+    <div class="law" id="law">—</div>
+    <div class="steps" id="triEx"></div>
+   </div>
+  </div>
+  <!-- k3 -->
+  <div class="tool calc" id="k3">
+   <div class="scroll">
+    <div class="ttl">حاسبة الكتلة الذرية</div>
+    <div class="row" style="flex-wrap:wrap;gap:6px;margin-bottom:6px"><span>أمثلة جاهزة:</span>
+     <button class="btn" data-ex="Cl">الكلور</button><button class="btn" data-ex="Br">البروم</button><button class="btn" data-ex="Mg">المغنيسيوم</button><button class="btn" data-ex="B">البورون</button><button class="btn" data-ex="Cu">النحاس</button></div>
+    <table class="iso"><thead><tr><th>النظير</th><th>الكتلة (amu)</th><th>نسبة الوجود %</th></tr></thead><tbody id="isoBody"></tbody></table>
+    <div class="row"><button class="btn" id="addIso">+ نظير</button><button class="btn g" id="calcGo">احسب</button></div>
+    <div class="warn" id="calcWarn"></div>
+   </div>
+   <div class="scroll"><ul class="steps" id="calcSteps"></ul><div id="calcRes"></div></div>
+  </div>
+  <!-- k4 -->
+  <div class="tool prac" id="k4">
+   <div>
+    <div class="row" style="justify-content:space-between"><div class="ttl">تدريب لا ينتهي</div><span class="score" id="pscore">⭐ 0</span></div>
+    <div class="q" id="pq"></div>
+    <div id="pin" style="display:grid;gap:8px"></div>
+    <div class="row" style="margin-top:10px;flex-wrap:wrap"><button class="btn g" id="pchk">تحقّق</button><button class="btn y" id="pstp">الخطوات الخمس</button><button class="btn" id="pnext">سؤال جديد ⟵</button></div>
+    <div id="pfb" style="margin-top:8px;font-size:18px"></div>
+   </div>
+   <div class="scroll"><ul class="steps" id="psteps"></ul></div>
+  </div>
+  <!-- k5 -->
+  <div class="tool sort" id="k5">
+   <div><div class="row" style="justify-content:space-between"><div class="ttl">اختر بطاقة ثم اضغط على المجموعة المناسبة</div><button class="btn" id="sortReset">↻ من جديد</button></div><div class="pool" id="pool"></div></div>
+   <div class="bins" id="bins"></div>
+  </div>
+ </div>
+</section>
+<!-- TAB 4 -->
+<section class="tab" id="t4"><div class="panel" id="quiz" style="display:grid;grid-template-rows:auto auto 1fr;min-height:0"></div></section>
+<!-- TAB 5 -->
+<section class="tab" id="t5">
+ <div class="tools"><button class="btn sel" data-g="g1">🃏 لعبة الذاكرة</button><button class="btn" data-g="g2">🏆 تحدي الفريقين</button></div>
+ <div class="panel" style="min-height:0">
+  <div class="tool on" id="g1" style="grid-template-rows:auto 1fr;gap:8px"><div class="row" style="justify-content:space-between"><div class="ttl">طابق المصطلح بمعناه</div><div><span class="score" id="memInfo"></span> <button class="btn" id="memReset">↻</button></div></div><div class="mem" id="mem"></div></div>
+  <div class="tool" id="g2"><div class="teams" id="teams"></div></div>
+ </div>
+</section>
+</main>
+</div>
+<script>
+/* ---------- media ---------- */
+const PARTS=[
+ {t:'الجزء 1: العدد الذري',dur:366.2,ch:[[0,'🎬','الغلاف'],[3,'👋','مقدمة الدرس'],[22.98,'🎯','الأهداف'],[44.78,'📖','مراجعة المفردات'],[65.85,'🆕','المفردات الجديدة'],[76.92,'💡','الفكرة الرئيسة'],[100,'🪪','الربط مع الحياة'],[122.8,'🔬','العدد الذري وموزلي'],[154.36,'🔢','نعدّ البروتونات'],[183.67,'🗂','العدد الذري في الجدول الدوري'],[219.23,'⚖','الذرة متعادلة'],[248.72,'✍','حل مسألة 14'],[301.99,'📘','لنعد إلى الكتاب'],[342.37,'✅','مراجعة'],[359.27,'⏭','يتبع']]},
+ {t:'الجزء 2: النظائر والعدد الكتلي',dur:409.9,ch:[[0,'🎬','الغلاف'],[3,'🔁','تذكّر'],[14.76,'🕯','دالتون كان مخطئاً'],[44.11,'🚗','فكرة النظائر'],[66.7,'⚛','نظائر البوتاسيوم'],[96.25,'⚖','كتلة النظائر والسلوك الكيميائي'],[116.85,'➕','العدد الكتلي'],[163.26,'🪙','كتابة رمز النظير'],[195.69,'🍌','النظائر في الطبيعة'],[235.39,'✍','حل مسألة 16'],[348.28,'📘','لنعد إلى الكتاب'],[380.16,'✅','مراجعة'],[403.71,'⏭','يتبع']]},
+ {t:'الجزء 3: كتل الذرات',dur:679.6,ch:[[0,'🎬','الغلاف'],[3,'🔁','تذكّر'],[20.12,'🔍','كتل صغيرة جداً'],[40.08,'🍰','وحدة الكتل الذرية'],[103.24,'⚖','كتل الجسيمات'],[142.48,'📊','الكتلة الذرية'],[186.56,'✍','حساب كتلة الكلور'],[302.06,'🧪','نسبة النظائر والبروم'],[389.25,'❓','ماذا قرأت؟'],[408.7,'🔴','تجربة: نمذجة النظائر'],[486.18,'📘','لنعد إلى الكتاب'],[522.9,'🧭','الخلاصة'],[555.41,'📝','اختبر نفسك'],[661.07,'🏁','الختام']]}];
+const CH=[[210.023,156.208],[210.023,199.917],[210.023,210,210,49.6]];
+const SRC=(p,k)=>(window.VSRC?VSRC(p,k):`v/p${p+1}_${k}.mp4`);
+/* ---------- audio ---------- */
+let AC=null,muted=false;
+function ac(){if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();return AC}
+function tone(f,d,type='sine',v=.15,when=0){if(muted)return;const a=ac(),o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(v,a.currentTime+when);g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+when+d);o.connect(g).connect(a.destination);o.start(a.currentTime+when);o.stop(a.currentTime+when+d)}
+const SND={ok(){[523,659,784].forEach((f,i)=>tone(f,.5,'triangle',.12,i*.07))},bad(){tone(140,.35,'sawtooth',.12);tone(110,.35,'sawtooth',.1,.08)},click(){tone(900,.05,'square',.05)},
+ whoosh(){if(muted)return;const a=ac(),n=a.sampleRate*.35,b=a.createBuffer(1,n,a.sampleRate),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.sin(Math.PI*i/n);const s=a.createBufferSource(),f=a.createBiquadFilter();f.type='bandpass';f.frequency.value=900;s.buffer=b;const g=a.createGain();g.gain.value=.25;s.connect(f).connect(g).connect(a.destination);s.start()},
+ tick(){tone(1500,.03,'square',.04)},fan(){[523,659,784,1046,784,1046].forEach((f,i)=>tone(f,.35,'triangle',.12,i*.12))}};
+document.getElementById('mute').onclick=e=>{muted=!muted;e.target.textContent=muted?'🔇':'🔊'};
+document.getElementById('fs').onclick=()=>{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()};
+/* ---------- bg ---------- */
+const bg=document.getElementById('bg'),bx=bg.getContext('2d');let dots=[];
+function rs(){bg.width=innerWidth;bg.height=innerHeight;fx.width=innerWidth;fx.height=innerHeight;dots=Array.from({length:Math.min(70,innerWidth/18)},()=>({x:Math.random()*bg.width,y:Math.random()*bg.height,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4}))}
+const fx=document.getElementById('fx'),fc=fx.getContext('2d');addEventListener('resize',rs);rs();
+let conf=[];
+function confetti(n=80,rain=false){for(let i=0;i<n;i++)conf.push({x:rain?Math.random()*fx.width:fx.width/2,y:rain?-20-Math.random()*fx.height*.5:fx.height*.55,vx:rain?(Math.random()-.5)*2:(Math.random()-.5)*14,vy:rain?2+Math.random()*3:-6-Math.random()*9,c:['#00e5ff','#2bff88','#ffd84d','#ff4d6d','#b388ff'][i%5],r:Math.random()*6,l:0})}
+(function loop(){bx.clearRect(0,0,bg.width,bg.height);for(const d of dots){d.x+=d.vx;d.y+=d.vy;if(d.x<0||d.x>bg.width)d.vx*=-1;if(d.y<0||d.y>bg.height)d.vy*=-1;bx.fillStyle='rgba(0,229,255,.55)';bx.beginPath();bx.arc(d.x,d.y,1.6,0,7);bx.fill()}
+ for(let i=0;i<dots.length;i++)for(let j=i+1;j<dots.length;j++){const a=dots[i],b=dots[j],dd=Math.hypot(a.x-b.x,a.y-b.y);if(dd<130){bx.strokeStyle=`rgba(0,229,255,${.12*(1-dd/130)})`;bx.beginPath();bx.moveTo(a.x,a.y);bx.lineTo(b.x,b.y);bx.stroke()}}
+ fc.clearRect(0,0,fx.width,fx.height);conf=conf.filter(p=>p.y<fx.height+30&&p.l<400);for(const p of conf){p.x+=p.vx;p.y+=p.vy;p.vy+=.25;p.vx*=.99;p.l++;p.r+=.2;fc.save();fc.translate(p.x,p.y);fc.rotate(p.r);fc.fillStyle=p.c;fc.fillRect(-4,-2,8,4);fc.restore()}
+ requestAnimationFrame(loop)})();
+/* ---------- tabs ---------- */
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{SND.whoosh();document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x==b));document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.id==b.dataset.t));if(b.dataset.t!='t2')vid.pause();if(b.dataset.t=='t3')drawAtom()});
+/* ---------- tab1 ---------- */
+const VOC=[['العدد الذري','عدد البروتونات في الذرة.'],['النظائر','الذرات التي لها عدد البروتونات نفسه لكنها تختلف في عدد النيوترونات.'],['العدد الكتلي','مجموع عدد البروتونات (العدد الذري) وعدد النيوترونات في نواة العنصر.'],['وحدة الكتل الذرية','1/12 من كتلة ذرة الكربون-12، ويرمز لها amu.'],['الكتلة الذرية','متوسط كتل نظائر العنصر الموجودة في الطبيعة.'],['الجدول الدوري','نموذج تترتب فيه جميع العناصر المعروفة تصاعدياً بحسب أعدادها الذرية في دورات ومجموعات.<br><small>(مراجعة)</small>']];
+document.getElementById('cards').innerHTML=VOC.map(v=>`<div class="fc"><div class="in"><div class="f"><div>${v[0]}<small>اضغط لترى المعنى</small></div></div><div class="b">${v[1]}</div></div></div>`).join('');
+document.querySelectorAll('.fc').forEach(c=>c.onclick=()=>{c.classList.toggle('flip');SND.click()});
+/* ---------- tab2 player ---------- */
+const vid=document.getElementById('vid'),seek=document.getElementById('seek');let P=0,K=0,pending=null;
+const off=(p,k)=>CH[p].slice(0,k).reduce((a,b)=>a+b,0);
+const fmt=s=>{s=Math.max(0,Math.floor(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+document.getElementById('parts').innerHTML=PARTS.map((p,i)=>`<button class="btn${i?'':' sel'}" data-p="${i}">${p.t}</button>`).join('');
+document.querySelectorAll('#parts .btn').forEach(b=>b.onclick=()=>{loadPart(+b.dataset.p,0,false)});
+function loadChunk(k,t,play){K=k;vid.src=SRC(P,k);vid.load();pending=t;vid.onloadedmetadata=()=>{if(pending!=null){vid.currentTime=pending;pending=null}if(play)vid.play()}}
+function loadPart(p,t=0,play=false){P=p;document.querySelectorAll('#parts .btn').forEach(b=>b.classList.toggle('sel',+b.dataset.p==p));
+ document.getElementById('chap').innerHTML=PARTS[p].ch.map((c,i)=>`<li data-i="${i}"><span>${c[1]}</span><span>${c[2]}</span><span class="ts">${fmt(c[0])}</span></li>`).join('');
+ document.querySelectorAll('#chap li').forEach(li=>li.onclick=()=>{goto(PARTS[P].ch[+li.dataset.i][0],true)});goto(t,play)}
+function goto(T,play){let k=0;while(k<CH[P].length-1&&T>=off(P,k+1))k++;const lt=T-off(P,k);if(k!==K||vid.dataset.key!==P+'_'+k){vid.dataset.key=P+'_'+k;loadChunk(k,lt,play)}else{vid.currentTime=lt;if(play)vid.play()}}
+const gT=()=>off(P,K)+(vid.currentTime||0);
+vid.onended=()=>{if(K<CH[P].length-1)loadChunk(K+1,0,true)};
+vid.ontimeupdate=()=>{const T=gT(),D=PARTS[P].dur;seek.value=T/D*1000;document.getElementById('tm').textContent=fmt(T)+' / '+fmt(D);
+ let ci=0;PARTS[P].ch.forEach((c,i)=>{if(T>=c[0]-.2)ci=i});document.querySelectorAll('#chap li').forEach((li,i)=>li.classList.toggle('on',i==ci))};
+vid.onplay=()=>document.getElementById('play').textContent='❚❚';vid.onpause=()=>document.getElementById('play').textContent='▶';
+document.getElementById('play').onclick=()=>{vid.paused?vid.play():vid.pause()};
+document.getElementById('back').onclick=()=>goto(Math.max(0,gT()-10),!vid.paused);
+seek.oninput=()=>goto(seek.value/1000*PARTS[P].dur,!vid.paused);
+const SP=[1,1.25,1.5,.75];let si=0;document.getElementById('spd').onclick=e=>{si=(si+1)%4;vid.playbackRate=SP[si];vid.defaultPlaybackRate=SP[si];e.target.textContent=SP[si]+'x'};
+vid.addEventListener('loadeddata',()=>{vid.playbackRate=SP[si]});
+document.getElementById('vfs').onclick=()=>{const el=document.querySelector('.player');document.fullscreenElement?document.exitFullscreen():el.requestFullscreen()};
+loadPart(0,0,false);
+/* ---------- tab3 tools ---------- */
+document.querySelectorAll('#tools .btn').forEach(b=>b.onclick=()=>{SND.click();document.querySelectorAll('#tools .btn').forEach(x=>x.classList.toggle('sel',x==b));document.querySelectorAll('#t3 .tool').forEach(t=>t.classList.toggle('on',t.id==b.dataset.k));if(b.dataset.k=='k1')drawAtom()});
+const EL=['','هيدروجين H','هيليوم He','ليثيوم Li','بريليوم Be','بورون B','كربون C','نيتروجين N','أكسجين O','فلور F','نيون Ne','صوديوم Na','مغنيسيوم Mg','ألومنيوم Al','سيليكون Si','فسفور P','كبريت S','كلور Cl','أرجون Ar','بوتاسيوم K','كالسيوم Ca','سكانديوم Sc','تيتانيوم Ti','فاناديوم V','كروم Cr','منجنيز Mn','حديد Fe','كوبلت Co','نيكل Ni','نحاس Cu','خارصين Zn'];
+const st={p:6,n:6,e:6};
+document.querySelectorAll('#k1 .cnt button').forEach(b=>b.onclick=()=>{const[k,d]=b.dataset.d.split(',');st[k]=Math.max(k=='p'?1:0,Math.min(30,st[k]+ +d));SND.click();drawAtom()});
+function drawAtom(){['p','n','e'].forEach(k=>document.getElementById('n'+k).textContent=st[k]);
+ const nm=EL[st.p]||'—',[ar,sy]=nm.split(' '),A=st.p+st.n,q=st.p-st.e;
+ document.getElementById('atomInfo').innerHTML=`<div>العنصر: <b style="color:var(--cy)">${ar}</b> <span class="ltr">(${sy})</span></div>
+ <div>العدد الذري Z = <span class="ltr p">${st.p}</span> <span style="opacity:.7;font-size:15px">(عدد البروتونات يحدد هوية العنصر)</span></div>
+ <div>العدد الكتلي A = <span class="ltr"><span class="p">${st.p}</span> + <span class="nn">${st.n}</span> = <b>${A}</b></span></div>
+ <div>اسم النظير: <b>${ar}-${A}</b> &nbsp; الرمز: <span class="ltr" style="font-size:26px"><sup class="p" style="font-size:14px">${A}</sup><sub class="e" style="font-size:14px;margin-left:-14px">${st.p}</sub>${sy}</span></div>
+ <div>${q==0?'<span style="color:var(--ok)">✔ ذرة متعادلة: عدد البروتونات = عدد الإلكترونات</span>':`<span style="color:var(--gold)">⚠ الشحنة <span class="ltr">${q>0?'+':''}${q}</span>: ليست ذرة متعادلة (أيون)</span>`}</div>`;
+ const c=document.getElementById('atomc'),r=c.getBoundingClientRect();if(!r.width)return;c.width=r.width*devicePixelRatio;c.height=r.height*devicePixelRatio;const x=c.getContext('2d');x.scale(devicePixelRatio,devicePixelRatio);
+ const W=r.width,H=r.height,cx=W/2,cy=H/2,R=Math.min(W,H)/2-10;x.clearRect(0,0,W,H);
+ const tot=st.p+st.n,br=Math.max(5,Math.min(13,R*.09));let pts=[[0,0]];for(let ring=1;pts.length<tot;ring++){const m=6*ring;for(let i=0;i<m;i++){const a=2*Math.PI*i/m+ring*.4;pts.push([Math.cos(a)*br*1.6*ring,Math.sin(a)*br*1.6*ring])}}
+ const ord=[];let pi=0;for(let i=0;i<tot;i++){if((pi*tot<(i+1)*st.p&&pi<st.p)||i-pi>=st.n){ord.push('p');pi++}else ord.push('n')}
+ pts.slice(0,tot).map((p,i)=>[p,ord[i]]).sort((a,b)=>Math.hypot(...b[0])-Math.hypot(...a[0])).forEach(([p,t])=>{const g=x.createRadialGradient(cx+p[0]-br*.3,cy+p[1]-br*.3,1,cx+p[0],cy+p[1],br);g.addColorStop(0,t=='p'?'#ffb3bd':'#e3e9f3');g.addColorStop(1,t=='p'?'#d43a4f':'#6f7d95');x.fillStyle=g;x.beginPath();x.arc(cx+p[0],cy+p[1],br,0,7);x.fill()});
+ const shells=[2,8,8,12];let left=st.e,s=0;while(left>0&&s<4){const k=Math.min(left,shells[s]),rr=R*(.45+.18*s);x.strokeStyle='rgba(0,229,255,.25)';x.beginPath();x.arc(cx,cy,rr,0,7);x.stroke();for(let i=0;i<k;i++){const a=2*Math.PI*i/k+performance.now()/2000*(s%2?1:-1);x.fillStyle='#6fc3ff';x.shadowColor='#00e5ff';x.shadowBlur=8;x.beginPath();x.arc(cx+rr*Math.cos(a),cy+rr*Math.sin(a),4.5,0,7);x.fill();x.shadowBlur=0}left-=k;s++}}
+setInterval(()=>{if(document.getElementById('k1').classList.contains('on')&&document.getElementById('t3').classList.contains('on'))drawAtom()},80);
+/* triangle */
+const TRI={A:['A = Z + n','العدد الكتلي = العدد الذري + عدد النيوترونات','مثال: نحاس فيه <span class="ltr">Z = 29</span> و <span class="ltr">n = 34</span> ← <span class="ltr">A = 29 + 34 = 63</span>'],Z:['Z = A − n','العدد الذري = العدد الكتلي − عدد النيوترونات','مثال: <span class="ltr">A = 17</span> و <span class="ltr">n = 9</span> ← <span class="ltr">Z = 17 − 9 = 8</span> (أكسجين)'],N:['n = A − Z','عدد النيوترونات = العدد الكتلي − العدد الذري','مثال: كالسيوم-46 ← <span class="ltr">n = 46 − 20 = 26</span>']};
+document.querySelectorAll('#trisvg .cell').forEach(g=>g.onclick=()=>{SND.whoosh();document.querySelectorAll('#trisvg .cell rect').forEach(r=>r.setAttribute('fill','transparent'));g.querySelector('rect').setAttribute('fill','rgba(255,216,77,.35)');const t=TRI[g.dataset.c];document.getElementById('law').innerHTML=`<span class="ltr" style="color:var(--cy)">${t[0]}</span><div style="font-size:17px;margin-top:6px">${t[1]}</div>`;document.getElementById('triEx').innerHTML=`<li>${t[2]}</li>`});
+/* calc */
+const EX={Cl:[['كلور-35',34.969,75.78],['كلور-37',36.966,24.22]],Br:[['بروم-79',78.918,50.69],['بروم-81',80.917,49.31]],Mg:[['مغنيسيوم-24',23.985,78.99],['مغنيسيوم-25',24.986,10.00],['مغنيسيوم-26',25.982,11.01]],B:[['بورون-10',10.013,19.8],['بورون-11',11.009,80.2]],Cu:[['نحاس-63',62.93,69.2],['نحاس-65',64.928,30.8]]};
+const ib=document.getElementById('isoBody');
+function isoRow(n='',m='',p=''){const tr=document.createElement('tr');tr.innerHTML=`<td><input value="${n}" placeholder="مثل: كلور-35"></td><td><input type="number" step="any" value="${m}" dir="ltr"></td><td><input type="number" step="any" value="${p}" dir="ltr"></td>`;ib.appendChild(tr)}
+function setEx(k){ib.innerHTML='';EX[k].forEach(r=>isoRow(...r));calc()}
+document.querySelectorAll('[data-ex]').forEach(b=>b.onclick=()=>{SND.click();setEx(b.dataset.ex)});
+document.getElementById('addIso').onclick=()=>{if(ib.children.length<4)isoRow()};
+document.getElementById('calcGo').onclick=calc;
+function calc(){const rows=[...ib.children].map(tr=>[...tr.querySelectorAll('input')].map(i=>i.value)).filter(r=>r[1]!==''&&r[2]!=='');const w=document.getElementById('calcWarn');w.textContent='';
+ if(!rows.length)return;const sum=rows.reduce((a,r)=>a+ +r[2],0);
+ if(rows.some(r=>+r[2]<1&&+r[2]>0)&&sum<=1.01)w.textContent='⚠ يبدو أنك أدخلت النسب أعداداً عشرية؛ أدخلها نسباً مئوية (مثل 75.78) وستُقسم على 100 تلقائياً.';
+ else if(Math.abs(sum-100)>.5)w.textContent=`⚠ مجموع النسب = ${sum.toFixed(2)}% وليس 100%، راجع الأرقام (تذكّر خطأ الكتاب في نسبة البروم).`;
+ let s1=rows.map(r=>`${r[0]||'نظير'}: الكتلة <span class="ltr">${r[1]} amu</span>، النسبة <span class="ltr">${r[2]}%</span>`).join('<br>');
+ let s2=rows.map(r=>`<span class="ltr">${r[2]} ÷ 100 = ${(+r[2]/100).toFixed(4)}</span>`).join('<br>');
+ let pr=rows.map(r=>+r[1]*(+r[2]/100));let s3=rows.map((r,i)=>`<span class="ltr">${r[1]} × ${(+r[2]/100).toFixed(4)} = ${pr[i].toFixed(4)} amu</span>`).join('<br>');
+ const tot=pr.reduce((a,b)=>a+b,0);
+ document.getElementById('calcSteps').innerHTML=`<li><b>المعطيات:</b><br>${s1}</li><li><b>القانون:</b> الكتلة الذرية = مجموع (كتلة النظير × نسبة وجوده)</li><li><b>التعويض:</b> نحول النسب ÷ 100<br>${s2}</li><li><b>الحساب:</b><br>${s3}</li>`;
+ document.getElementById('calcRes').innerHTML=`<div class="res">الناتج: <span class="ltr">${tot.toFixed(3)} amu</span></div><div class="warn" style="color:var(--ok)">تقويم الإجابة: الناتج يقع بين أصغر كتلة وأكبر كتلة، وأقرب إلى كتلة النظير الأكثر وجوداً ✔</div>`;SND.ok()}
+setEx('Cl');
+/* practice */
+const PE=[['هيدروجين','H',1,2],['هيليوم','He',2,4],['ليثيوم','Li',3,7],['كربون','C',6,13],['نيتروجين','N',7,15],['أكسجين','O',8,18],['فلور','F',9,19],['نيون','Ne',10,22],['صوديوم','Na',11,23],['مغنيسيوم','Mg',12,26],['ألومنيوم','Al',13,27],['سيليكون','Si',14,30],['كبريت','S',16,34],['كلور','Cl',17,37],['بوتاسيوم','K',19,41],['كالسيوم','Ca',20,44],['حديد','Fe',26,56],['نحاس','Cu',29,65],['خارصين','Zn',30,66],['فضة','Ag',47,109],['ذهب','Au',79,197],['رصاص','Pb',82,208],['يورانيوم','U',92,238]];
+const AMD=[['البورون',['بورون-10',10.013,19.8],['بورون-11',11.009,80.2]],['النحاس',['نحاس-63',62.93,69.2],['نحاس-65',64.928,30.8]],['الليثيوم',['ليثيوم-6',6.015,7.59],['ليثيوم-7',7.016,92.41]],['الكلور',['كلور-35',34.969,75.78],['كلور-37',36.966,24.22]],['البروم',['بروم-79',78.918,50.69],['بروم-81',80.917,49.31]],['الجاليوم',['جاليوم-69',68.926,60.11],['جاليوم-71',70.925,39.89]],['الفضة',['فضة-107',106.905,51.84],['فضة-109',108.905,48.16]]];
+let PQ=null,psc=0;const rnd=a=>a[Math.floor(Math.random()*a.length)];
+function inp(lbl,id){return `<label class="row"><span style="min-width:150px">${lbl}</span><input id="${id}" type="number" step="any" dir="ltr"></label>`}
+function newP(){document.getElementById('pfb').textContent='';document.getElementById('psteps').innerHTML='';const t=Math.floor(Math.random()*3);
+ if(t==0){const[e,s,Z,A]=rnd(PE);PQ={t,ans:{p:Z,e:Z,n:A-Z},steps:[`<b>المعطيات:</b> ${e}-${A}: العدد الذري <span class="ltr">Z = ${Z}</span> (من الجدول الدوري)، العدد الكتلي <span class="ltr">A = ${A}</span> (من اسم النظير)`,`<b>القانون:</b> <span class="ltr">p = e = Z</span> و <span class="ltr">n = A − Z</span>`,`<b>التعويض:</b> <span class="ltr">n = ${A} − ${Z}</span>`,`<b>الحساب:</b> <span class="ltr">n = ${A-Z}</span>`,`<b>الناتج:</b> <span class="ltr">p = ${Z} ، e = ${Z} ، n = ${A-Z}</span>`]};
+  document.getElementById('pq').innerHTML=`نظير <b style="color:var(--cy)">${e}-${A}</b> <span class="ltr">(<sup>${A}</sup><sub>${Z}</sub>${s})</span>: احسب عدد البروتونات والإلكترونات والنيوترونات.`;document.getElementById('pin').innerHTML=inp('البروتونات p','a_p')+inp('الإلكترونات e','a_e')+inp('النيوترونات n','a_n')}
+ else if(t==1){const[e,s,Z,A]=rnd(PE);PQ={t,ans:{A:A},steps:[`<b>المعطيات:</b> <span class="ltr">p = ${Z}</span> ، <span class="ltr">n = ${A-Z}</span>`,`<b>القانون:</b> <span class="ltr">A = Z + n</span>`,`<b>التعويض:</b> <span class="ltr">A = ${Z} + ${A-Z}</span>`,`<b>الحساب:</b> <span class="ltr">A = ${A}</span>`,`<b>الناتج:</b> العدد الكتلي ${A}، والعنصر ${e} (لأن عدده الذري ${Z})، فالنظير ${e}-${A}`]};
+  document.getElementById('pq').innerHTML=`ذرة تحتوي على <span class="p">${Z} بروتوناً</span> و <span class="nn">${A-Z} نيوتروناً</span>. ما عددها الكتلي؟ <span style="opacity:.75">(ثم خمّن العنصر!)</span>`;document.getElementById('pin').innerHTML=inp('العدد الكتلي A','a_A')}
+ else{const d=rnd(AMD),iso=d.slice(1),pr=iso.map(r=>r[1]*r[2]/100),tot=pr.reduce((a,b)=>a+b,0);PQ={t,ans:{M:tot},steps:[`<b>المعطيات:</b> `+iso.map(r=>`${r[0]}: <span class="ltr">${r[1]} amu ، ${r[2]}%</span>`).join(' — '),`<b>القانون:</b> الكتلة الذرية = مجموع (الكتلة × النسبة العشرية)`,`<b>التعويض:</b> `+iso.map(r=>`<span class="ltr">${r[1]} × ${(r[2]/100).toFixed(4)}</span>`).join(' + '),`<b>الحساب:</b> `+pr.map(v=>`<span class="ltr">${v.toFixed(3)}</span>`).join(' + '),`<b>الناتج:</b> <span class="ltr">${tot.toFixed(3)} amu</span> ✔ يقع بين الكتلتين وأقرب إلى النظير الأكثر وجوداً`]};
+  document.getElementById('pq').innerHTML=`احسب الكتلة الذرية لعنصر <b style="color:var(--cy)">${d[0]}</b>:<br>`+iso.map(r=>`${r[0]}: كتلته <span class="ltr">${r[1]} amu</span>، ونسبة وجوده <span class="ltr">${r[2]}%</span>`).join('<br>');document.getElementById('pin').innerHTML=inp('الكتلة الذرية (amu)','a_M')}}
+document.getElementById('pnext').onclick=()=>{SND.whoosh();newP()};
+document.getElementById('pstp').onclick=()=>{document.getElementById('psteps').innerHTML=PQ.steps.map(s=>`<li>${s}</li>`).join('')};
+document.getElementById('pchk').onclick=()=>{let ok=true;for(const k in PQ.ans){const v=parseFloat((document.getElementById('a_'+k)||{}).value);if(isNaN(v)||Math.abs(v-PQ.ans[k])>(k=='M'?.02:.001))ok=false}
+ const fb=document.getElementById('pfb');if(ok){psc++;document.getElementById('pscore').textContent='⭐ '+psc;fb.innerHTML='<span style="color:var(--ok)">✔ إجابة صحيحة! أحسنت</span>';SND.ok();confetti(60)}else{fb.innerHTML='<span style="color:var(--bad)">✘ حاول مرة أخرى، أو اضغط «الخطوات الخمس»</span>'+(PQ.t==2?'<div class="warn">تذكّر: حوّل النسبة المئوية بالقسمة على 100 قبل الضرب.</div>':'');SND.bad()}};
+newP();
+/* sort */
+const BINS=['العدد الذري','النظائر','العدد الكتلي','الكتلة الذرية'];
+const ITEMS=[['عدد البروتونات في الذرة',0],['يحدد هوية العنصر',0],['يُكتب أسفل يسار رمز النظير',0],['كلور-35 وكلور-37',1],['تختلف في عدد النيوترونات فقط',1],['لها السلوك الكيميائي نفسه',1],['بروتونات + نيوترونات',2],['الرقم 63 في نحاس-63',2],['يُكتب أعلى يسار رمز النظير',2],['متوسط كتل نظائر العنصر',3],['35.453 amu للكلور',3],['غالباً عدد عشري',3]];
+let sel=null;
+function sortInit(){sel=null;document.getElementById('bins').innerHTML=BINS.map((b,i)=>`<div class="bin" data-b="${i}"><h4>${b}</h4></div>`).join('');
+ const it=[...ITEMS].sort(()=>Math.random()-.5);document.getElementById('pool').innerHTML=it.map(t=>`<span class="chip" data-c="${t[1]}">${t[0]}</span>`).join('');
+ document.querySelectorAll('#pool .chip').forEach(c=>c.onclick=()=>{SND.click();document.querySelectorAll('#pool .chip').forEach(x=>x.classList.remove('sel'));c.classList.add('sel');sel=c});
+ document.querySelectorAll('.bin').forEach(b=>b.onclick=()=>{if(!sel)return;if(sel.dataset.c==b.dataset.b){b.appendChild(sel);sel.classList.remove('sel');sel.onclick=null;sel=null;SND.ok();if(!document.querySelector('#pool .chip')){SND.fan();confetti(150,true)}}else{SND.bad();b.classList.add('shake');setTimeout(()=>b.classList.remove('shake'),400)}})}
+document.getElementById('sortReset').onclick=sortInit;sortInit();
+/* ---------- quiz ---------- */
+const QZ=[
+['ما الذي يحدد نوع (هوية) الذرة؟',['عدد البروتونات','عدد النيوترونات','عدد الإلكترونات الحرة','العدد الكتلي فقط'],'العدد الذري (عدد البروتونات) هو رقم هوية العنصر.'],
+['العدد الذري لعنصر يساوي:',['عدد البروتونات في الذرة','عدد النيوترونات','مجموع البروتونات والنيوترونات','متوسط كتل النظائر'],'العدد الذري = عدد البروتونات = عدد الإلكترونات في الذرة المتعادلة.'],
+['ذرة متعادلة عددها الذري 14، كم عدد إلكتروناتها؟',['14','28','7','0'],'في الذرة المتعادلة عدد الإلكترونات = عدد البروتونات = 14 (السيليكون).'],
+['ما العنصر الذي تحتوي ذرته على 14 بروتوناً؟',['السيليكون Si','النيتروجين N','الحديد Fe','الكربون C'],'العدد الذري 14 في الجدول الدوري هو السيليكون.'],
+['النظائر ذرات للعنصر نفسه تختلف في عدد:',['النيوترونات','البروتونات','الإلكترونات','الشحنات الموجبة'],'النظائر لها عدد البروتونات نفسه وتختلف في عدد النيوترونات.'],
+['العدد الكتلي يساوي:',['عدد البروتونات + عدد النيوترونات','عدد البروتونات + عدد الإلكترونات','عدد النيوترونات فقط','متوسط كتل النظائر'],'العدد الكتلي = العدد الذري + عدد النيوترونات.'],
+['كم نيوتروناً في الكالسيوم-46 (العدد الذري 20)؟',['26','46','20','66'],'n = A − Z = 46 − 20 = 26'],
+['في الرمز ⁶³₂₉Cu، الرقم 63 يمثل:',['العدد الكتلي','العدد الذري','عدد النيوترونات','الكتلة الذرية'],'العدد الكتلي يُكتب أعلى يسار الرمز، والعدد الذري أسفله.'],
+['نظائر العنصر الواحد لها:',['السلوك الكيميائي نفسه','الكتلة نفسها','عدد النيوترونات نفسه','العدد الكتلي نفسه'],'السلوك الكيميائي يحدده عدد الإلكترونات، وهو واحد في النظائر.'],
+['وحدة الكتل الذرية (amu) تساوي:',['1/12 من كتلة ذرة الكربون-12','كتلة ذرة الهيدروجين','1/16 من كتلة ذرة الأكسجين','كتلة إلكترون واحد'],'تعريف الكتاب: 1/12 من كتلة ذرة الكربون-12.'],
+['أي الجسيمات كتلته أصغر بكثير؟',['الإلكترون','البروتون','النيوترون','كتلها متساوية'],'كتلة الإلكترون ≈ 1/1840 من كتلة البروتون.'],
+['لماذا لا تكون الكتلة الذرية لمعظم العناصر عدداً صحيحاً؟',['لأنها متوسط كتل النظائر حسب نسب وجودها','لأن الإلكترونات لها كتلة كبيرة','لأن البروتونات تختلف كتلها بين العناصر','بسبب أخطاء القياس'],'الكتلة الذرية متوسط موزون لكتل النظائر.'],
+['الكتلة الذرية للكلور 35.453 amu، فالنظير الأكثر وجوداً هو:',['الكلور-35','الكلور-37','الكلور-36','متساويان'],'الناتج أقرب إلى 35، إذن الكلور-35 أكثر وجوداً (75.78%).'],
+['البروم كتلته الذرية 79.904، وله نظيران 79 و81. ماذا نستنتج؟',['نسبتا وجود النظيرين متقاربتان','البروم-80 هو الأكثر وجوداً','البروم-81 غير موجود','البروم ليس له نظائر'],'البروم-80 غير موجود؛ والمتوسط في المنتصف لأن النسبتين 50.69% و49.31%.'],
+['عند حساب الكتلة الذرية، نحوّل النسبة المئوية إلى عدد عشري بـ:',['القسمة على 100','الضرب في 100','القسمة على 12','الضرب في الكتلة'],'مثل: 75.78% ÷ 100 = 0.7578']];
+let QS=[],qi=0,qsc=0,qok=0,useT=true,tLeft=30,tId=null,answered=false;
+const quiz=document.getElementById('quiz');
+function qStart(){QS=QZ.map(q=>({q:q[0],o:q[1].map((t,i)=>({t,c:i==0})).sort(()=>Math.random()-.5),e:q[2]})).sort(()=>Math.random()-.5);qi=0;qsc=0;qok=0;qShow()}
+function qShow(){clearInterval(tId);answered=false;if(qi>=QS.length)return qEnd();const Q=QS[qi];
+ quiz.innerHTML=`<div class="qhead"><span class="score">⭐ ${qsc}</span><div class="bar"><i style="width:${qi/QS.length*100}%"></i></div><span>سؤال <span class="ltr">${qi+1}/${QS.length}</span></span><label class="row" style="width:auto"><input type="checkbox" id="useT" ${useT?'checked':''} style="width:auto"> مؤقت</label><span class="tmr" id="tmr">${useT?30:'∞'}</span></div>
+ <div class="qtext">${Q.q}</div><div class="scroll" style="min-height:0"><div class="opts">${Q.o.map((o,i)=>`<button class="opt" data-i="${i}">${o.t}</button>`).join('')}</div><div class="exp" id="exp"></div>
+ <div class="row" style="margin-top:10px"><button class="btn y" id="rev">👁 أظهر الإجابة</button><button class="btn" id="nxt" style="display:none">التالي ⟵</button></div></div>`;
+ document.getElementById('useT').onchange=e=>{useT=e.target.checked;qShow()};
+ quiz.querySelectorAll('.opt').forEach(b=>b.onclick=()=>qAns(+b.dataset.i));document.getElementById('rev').onclick=()=>qAns(-1);document.getElementById('nxt').onclick=()=>{qi++;SND.whoosh();qShow()};
+ if(useT){tLeft=30;tId=setInterval(()=>{tLeft--;const el=document.getElementById('tmr');if(el)el.textContent=tLeft;if(tLeft<=5&&tLeft>0)SND.tick();if(tLeft<=0)qAns(-1)},1000)}}
+function qAns(i){if(answered)return;answered=true;clearInterval(tId);const Q=QS[qi],bs=quiz.querySelectorAll('.opt');bs.forEach((b,j)=>{if(Q.o[j].c)b.classList.add('ok');else if(j==i)b.classList.add('no')});
+ if(i>=0&&Q.o[i].c){qok++;const pts=10+(useT?Math.ceil(tLeft/3):0);qsc+=pts;SND.ok();confetti(70)}else SND.bad();
+ const ex=document.getElementById('exp');ex.style.display='block';ex.innerHTML='💡 '+Q.e.replace(/([0-9][0-9.\s=−+÷×%/A-Za-z]*[0-9%])/g,'<span class="ltr">$1</span>');document.getElementById('nxt').style.display='';document.getElementById('rev').style.display='none';
+ quiz.querySelector('.score').textContent='⭐ '+qsc}
+function qEnd(){SND.fan();confetti(220,true);const pc=Math.round(qok/QS.length*100);
+ quiz.innerHTML=`<div class="result" style="grid-row:1/4"><div class="big2"><span class="ltr">${qok}/${QS.length}</span></div><div style="font-size:24px">النقاط: <b style="color:var(--gold)">${qsc}</b> — النسبة <span class="ltr">${pc}%</span></div><div style="font-size:22px">${pc>=90?'🏆 ممتاز! أنت بطل الذرات':pc>=70?'🌟 رائع! راجع الأخطاء القليلة':'💪 راجع الفيديو وحاول مرة أخرى'}</div><button class="btn g" id="again">↻ أعد الاختبار</button></div>`;document.getElementById('again').onclick=qStart}
+qStart();
+/* ---------- games ---------- */
+document.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{SND.click();document.querySelectorAll('[data-g]').forEach(x=>x.classList.toggle('sel',x==b));document.querySelectorAll('#t5 .tool').forEach(t=>t.classList.toggle('on',t.id==b.dataset.g))});
+const MP=[['العدد الذري','عدد البروتونات'],['النظائر','تختلف في عدد النيوترونات'],['العدد الكتلي','بروتونات + نيوترونات'],['amu','1/12 من كتلة الكربون-12'],['الكتلة الذرية','متوسط كتل النظائر'],['الإلكترون','≈ 1/1840 من كتلة البروتون']];
+let mOpen=[],mDone=0,mTries=0,mLock=false;
+function memInit(){mOpen=[];mDone=0;mTries=0;const cs=MP.flatMap((p,i)=>[{t:p[0],k:i},{t:p[1],k:i}]).sort(()=>Math.random()-.5);
+ document.getElementById('mem').innerHTML=cs.map(c=>`<div class="mc hide" data-k="${c.k}">${c.t}</div>`).join('');document.getElementById('memInfo').textContent='المحاولات: 0';
+ document.querySelectorAll('.mc').forEach(c=>c.onclick=()=>{if(mLock||!c.classList.contains('hide'))return;c.classList.remove('hide');SND.click();mOpen.push(c);
+  if(mOpen.length==2){mTries++;document.getElementById('memInfo').textContent='المحاولات: '+mTries;const[a,b]=mOpen;mOpen=[];
+   if(a.dataset.k==b.dataset.k){a.classList.add('done');b.classList.add('done');mDone++;SND.ok();confetti(40);if(mDone==MP.length){SND.fan();confetti(200,true)}}
+   else{mLock=true;SND.bad();setTimeout(()=>{a.classList.add('hide');b.classList.add('hide');mLock=false},900)}}})}
+document.getElementById('memReset').onclick=memInit;memInit();
+let TM={s:[0,0],turn:0,q:null,order:[],i:0};
+function teamsInit(){TM.order=QZ.map((q,i)=>i).sort(()=>Math.random()-.5);TM.i=0;TM.s=[0,0];TM.turn=0;teamsRender()}
+function teamsRender(){const q=QZ[TM.order[TM.i%QZ.length]],opts=q[1].map((t,i)=>({t,c:i==0})).sort(()=>Math.random()-.5);
+ document.getElementById('teams').innerHTML=`<div class="team ${TM.turn==0?'on':''}"><input value="${TM.n0||'الفريق الأول'}" id="tn0"><div class="pts">${TM.s[0]}</div></div>
+ <div class="qa panel" style="display:grid;align-content:center;gap:10px"><div style="text-align:center;color:var(--gold);font-weight:800">دور: ${TM.turn==0?(TM.n0||'الفريق الأول'):(TM.n1||'الفريق الثاني')}</div><div class="qtext" style="text-align:center">${q[0]}</div><div class="opts">${opts.map((o,i)=>`<button class="opt" data-c="${o.c?1:0}">${o.t}</button>`).join('')}</div><div style="text-align:center"><button class="btn" id="tnext" style="display:none">السؤال التالي ⟵</button> <button class="btn r" id="treset">↻ صفّر</button></div></div>
+ <div class="team ${TM.turn==1?'on':''}"><input value="${TM.n1||'الفريق الثاني'}" id="tn1"><div class="pts">${TM.s[1]}</div></div>`;
+ ['tn0','tn1'].forEach((id,k)=>document.getElementById(id).onchange=e=>{TM['n'+k]=e.target.value});
+ let done=false;document.querySelectorAll('#teams .opt').forEach(b=>b.onclick=()=>{if(done)return;done=true;document.querySelectorAll('#teams .opt').forEach(x=>{if(x.dataset.c=='1')x.classList.add('ok')});if(b.dataset.c=='1'){TM.s[TM.turn]+=10;SND.ok();confetti(60)}else{b.classList.add('no');SND.bad()}document.querySelectorAll('#teams .pts')[TM.turn].textContent=TM.s[TM.turn];document.getElementById('tnext').style.display=''});
+ document.getElementById('tnext').onclick=()=>{TM.i++;TM.turn=1-TM.turn;if(TM.i>=QZ.length){SND.fan();confetti(220,true);TM.i=0}SND.whoosh();teamsRender()};
+ document.getElementById('treset').onclick=teamsInit}
+teamsInit();
+</script>
+</body>
+</html>
